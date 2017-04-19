@@ -1,0 +1,108 @@
+<audio id="theme1" src="AUDIO/Theme1.mp3" onended="theme1End()"></audio>
+<body onkeydown="keyDown(event)" onkeyup="keyUp(event)"> </body>
+<canvas id="graphics" width=600 height=400 style="position:absolute;top:0;left:0;background-image:url('IMAGES/background.png');"> </canvas>
+
+<script> 
+
+
+//Variables
+var theme1 = document.getElementById("theme1");
+theme1.play();
+function theme1End(){
+	theme1.play();
+}
+
+var sndJump = new Audio ("AUDIO/Jump.mp3")
+
+var gameCanvas = document.getElementById("graphics");
+var grafix = gameCanvas.getContext('2d');
+var player = new Object('IMAGES/TempMario.png',100,100,32,44);
+
+var maxBlock= 200;
+var block = new Array();
+for (var i=0;i<=maxBlock;i++) (
+	block[i] = new Object('IMAGES/Block.png',i*32+100,300,32,32)
+)
+
+var isLeft = false;
+var isRight = false;
+var isSpace = false;
+player.Gravity = 20;
+player.Weight = 0.1;
+
+
+//Events
+function keyDown(e) {
+	if (String.fromCharCode(e.keyCode) == "%") isLeft = true;
+	if (String.fromCharCode(e.keyCode) == "'") isRight = true;
+	if (String.fromCharCode(e.keyCode) == " ") isSpace = true;
+	
+}
+
+function keyUp(e) {
+	if (String.fromCharCode(e.keyCode) == "%") isLeft = false;
+	if (String.fromCharCode(e.keyCode) == "'") isRight = false;
+	if (String.fromCharCode(e.keyCode) == " ") isSpace = false;
+
+}
+
+//MainLoop
+MainLoop();
+function MainLoop() {
+
+//Stuff Before Hand
+for (var i=0;i<=maxBlock;i++) block[i].X += -player.Velocity_X;
+player.Y += player.Velocity_Y;
+
+//Doing The Works
+if (isLeft) player.Velocity_X = -3;
+if (isRight) player.Velocity_X = 3;
+if (!isLeft && !isRight && player.Velocity_Y== 0) player.Velocity_X = 0;
+
+if (player.Velocity_Y < player.Gravity) player.Velocity_Y += player.Weight;
+
+for (var i=0;i<=maxBlock;i++) {
+if (player.isColliding(block[i]) && player.Y + player.Height < block[i].Y + player.Velocity_Y) {
+	player.Y = block[i].Y - player.Height;
+	player.Velocity_Y = 0;
+
+	}
+}
+if (isSpace && player.Velocity_Y == 0) {
+	player.Velocity_Y = -5;
+	sndJump.play();
+}
+
+//After the Works
+
+//Rendering
+grafix.clearRect(0,0,gameCanvas.width,gameCanvas.height);
+for (var i=0;i<=maxBlock;i++) grafix.drawImage(block[i].Sprite,block[i].X,block[i].Y);
+grafix.drawImage(player.Sprite,player.X,player.Y);
+setTimeout(MainLoop,1000/60);
+}
+
+//Object Class
+function Object(img,x,y,width,height) {
+this.Sprite = new Image();
+this.Sprite.src = img;
+this.X = x;
+this.Y = y;
+this.Width = width;
+this.Height = height;
+this.Previous_X;
+this.Previous_Y;
+this.Velocity_X = 0;
+this.Velocity_Y = 0;
+this.Gravity = 0;
+this.Weight = 0;
+
+this.isColliding = function(obj) {
+	if (this.X > obj.X + obj.Width) return false;
+	if (this.X + this.Width < obj.X) return false;
+	if (this.Y > obj.Y + obj.Height) return false;
+	if (this.Y + this.Height < obj.Y) return false;
+	return true;
+	}
+}
+</script>
