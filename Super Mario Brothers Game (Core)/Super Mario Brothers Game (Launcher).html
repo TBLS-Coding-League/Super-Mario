@@ -18,6 +18,8 @@ var gameCanvas = document.getElementById("graphics");
 var grafix = gameCanvas.getContext('2d');
 var player = new Object('IMAGES/TempMario.png',100,100,32,44);
 
+var pent = new Object ('IMAGES/pent.png',200,50,32,32);
+	
 var maxBlock= 200;
 var block = new Array();
 for (var i=0;i<=maxBlock;i++) (
@@ -77,6 +79,9 @@ if (isSpace && player.Velocity_Y == 0) {
 
 //Rendering
 grafix.clearRect(0,0,gameCanvas.width,gameCanvas.height);
+
+grafix.drawImage(pent.Sprite,pent.X,pent.Y);
+
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(block[i].Sprite,block[i].X,block[i].Y);
 grafix.drawImage(player.Sprite,player.X,player.Y);
 setTimeout(MainLoop,1000/60);
