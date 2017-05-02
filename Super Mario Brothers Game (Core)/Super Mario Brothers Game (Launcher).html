@@ -6,26 +6,35 @@
 
 
 //Variables
+
+//    Audio
 var theme1 = document.getElementById("theme1");
 theme1.play();
 function theme1End(){
 	theme1.play();
 }
 
-var sndJump = new Audio ("AUDIO/Jump.mp3")
 
+var sndJump = new Audio ("AUDIO/Jump.mp3")
+//     Rendering
 var gameCanvas = document.getElementById("graphics");
 var grafix = gameCanvas.getContext('2d');
 var player = new Object('IMAGES/TempMario.png',100,100,32,44);
 
-var pent = new Object('IMAGES/pent.png',200,50,32,32);
-	
+var pent = new Object('IMAGES/pent.png',200,200,32,44);
+
+var startingBoundary = new Object('IMAGES/StartingWall.png',100,400,100,400);
+
 var maxBlock= 200;
 var block = new Array();
 for (var i=0;i<=maxBlock;i++) (
-	block[i] = new Object('IMAGES/Block.png',i*32+100,300,32,32)
+	block[i] = new Object('IMAGES/Ground.png',i*32+0,300,32,32)
 )
-
+var underBlock = new Array();
+for (var i=0;i<=maxBlock;i++) {
+	underBlock[i] = new Object('IMAGES/BelowGround.png',i*32+0,332,32,32);
+}
+//       Control
 var isLeft = false;
 var isRight = false;
 var isSpace = false;
@@ -52,11 +61,12 @@ function keyUp(e) {
 MainLoop();
 function MainLoop() {
 
-//Stuff Before Hand
+//Scroll Control
 for (var i=0;i<=maxBlock;i++) block[i].X += -player.Velocity_X;
 player.Y += player.Velocity_Y;
+pent.X += -player.Velocity_X;
 
-//Doing The Works
+//Movement & Collision Interactions
 if (isLeft) player.Velocity_X = -3;
 if (isRight) player.Velocity_X = 3;
 if (!isLeft && !isRight && player.Velocity_Y== 0) player.Velocity_X = 0;
@@ -70,19 +80,36 @@ if (player.isColliding(block[i]) && player.Y + player.Height < block[i].Y + play
 
 	}
 }
+if (player.isColliding(pent) && player.Y + player.Height < pent.Y + player.Velocity_Y) {
+	player.Y = pent.Y - player.Height;
+	player.Velocity_Y = 0;
+}
 if (isSpace && player.Velocity_Y == 0) {
 	player.Velocity_Y = -5;
 	sndJump.play();
 }
 
-//After the Works
+//Hmm Maybe Something Should be here?
 
 //Rendering
 grafix.clearRect(0,0,gameCanvas.width,gameCanvas.height);
 
-grafix.drawImage(pent.Sprite,pent.X,pent.Y);
+grafix.drawImage(startingBoundary.Sprite,startingBoundary.X,startingBoundary.Y);
 
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(block[i].Sprite,block[i].X,block[i].Y);
+
+for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 32);
+for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 64);
+for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 96);
+for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 128);
+for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 160);
+for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 192);
+for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 224);
+for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 256);
+
+
+grafix.drawImage(pent.Sprite,pent.X,pent.Y);
+
 grafix.drawImage(player.Sprite,player.X,player.Y);
 setTimeout(MainLoop,1000/60);
 }
@@ -101,6 +128,10 @@ this.Velocity_X = 0;
 this.Velocity_Y = 0;
 this.Gravity = 0;
 this.Weight = 0;
+
+
+
+//Collisions (A Part of Object Class)
 
 this.isColliding = function(obj) {
 	if (this.X > obj.X + obj.Width) return false;
