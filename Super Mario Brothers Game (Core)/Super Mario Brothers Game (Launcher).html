@@ -1,6 +1,6 @@
 <audio id="theme1" src="AUDIO/Theme1.mp3" onended="theme1End()"></audio>
 <body onkeydown="keyDown(event)" onkeyup="keyUp(event)"> </body>
-<canvas id="graphics" width=600 height=400 style="position:absolute;top:0;left:0;background-image:url('IMAGES/background.png');"> </canvas>
+<canvas id="graphics" width=600 height=400 style="position:absolute;top:0;left:0; background-color:blue;background-image:url('IMAGES/background.png');"> </canvas>
 
 <script> 
 
@@ -19,11 +19,11 @@ var sndJump = new Audio ("AUDIO/Jump.mp3")
 //     Rendering
 var gameCanvas = document.getElementById("graphics");
 var grafix = gameCanvas.getContext('2d');
-var player = new Object('IMAGES/TempMario.png',100,100,32,44);
+var player = new Object('IMAGES/TempMario.png',150,100,32,44);
 
 var pent = new Object('IMAGES/pent.png',200,200,32,44);
 
-var startingBoundary = new Object('IMAGES/StartingWall.png',100,400,100,400);
+var startingBoundary = new Object('IMAGES/StartingWall.png',40,0,100,400);
 
 var maxBlock= 200;
 var block = new Array();
@@ -32,7 +32,7 @@ for (var i=0;i<=maxBlock;i++) (
 )
 var underBlock = new Array();
 for (var i=0;i<=maxBlock;i++) {
-	underBlock[i] = new Object('IMAGES/BelowGround.png',i*32+0,332,32,32);
+	underBlock[i] = new Object('IMAGES/BelowGround.png',i*32,332,32,32);
 }
 //       Control
 var isLeft = false;
@@ -66,6 +66,8 @@ for (var i=0;i<=maxBlock;i++) block[i].X += -player.Velocity_X;
 player.Y += player.Velocity_Y;
 pent.X += -player.Velocity_X;
 
+startingBoundary.X += -player.Velocity_X;
+
 //Movement & Collision Interactions
 if (isLeft) player.Velocity_X = -3;
 if (isRight) player.Velocity_X = 3;
@@ -84,6 +86,9 @@ if (player.isColliding(pent) && player.Y + player.Height < pent.Y + player.Veloc
 	player.Y = pent.Y - player.Height;
 	player.Velocity_Y = 0;
 }
+if (player.isColliding(startingBoundary)) {
+	player.Velocity_X = 0.5;
+}
 if (isSpace && player.Velocity_Y == 0) {
 	player.Velocity_Y = -5;
 	sndJump.play();
@@ -96,6 +101,7 @@ grafix.clearRect(0,0,gameCanvas.width,gameCanvas.height);
 
 grafix.drawImage(startingBoundary.Sprite,startingBoundary.X,startingBoundary.Y);
 
+
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(block[i].Sprite,block[i].X,block[i].Y);
 
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 32);
@@ -106,7 +112,6 @@ for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,b
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 192);
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 224);
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 256);
-
 
 grafix.drawImage(pent.Sprite,pent.X,pent.Y);
 
