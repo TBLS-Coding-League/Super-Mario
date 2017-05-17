@@ -23,6 +23,8 @@ var player = new Object('IMAGES/TempMario.png',150,100,32,44);
 
 var pent = new Object('IMAGES/pent.png',200,200,32,44);
 
+var koopa = new Object('IMAGES/koopa.png',250,200,32,44);
+
 var startingBoundary = new Object('IMAGES/StartingWall.png',40,0,100,400);
 
 var maxBlock= 200;
@@ -40,7 +42,8 @@ var isRight = false;
 var isSpace = false;
 player.Gravity = 20;
 player.Weight = 0.1;
-
+koopa.Weight =.15;
+koopa.Gravity = 20;
 
 //Events
 function keyDown(e) {
@@ -65,6 +68,8 @@ function MainLoop() {
 for (var i=0;i<=maxBlock;i++) block[i].X += -player.Velocity_X;
 player.Y += player.Velocity_Y;
 pent.X += -player.Velocity_X;
+
+koopa.X += -player.Velocity_X;
 
 startingBoundary.X += -player.Velocity_X;
 
@@ -94,6 +99,23 @@ if (isSpace && player.Velocity_Y == 0) {
 	sndJump.play();
 }
 
+
+//Koopa Controls
+koopa.Gravity = 20;
+koopa.Weight = .20;
+koopa.Y += koopa.Velocity_Y;
+koopa.X += koopa.Velocity_X;
+
+if (koopa.Velocity_Y < koopa.Gravity) koopa.Velocity_Y += koopa.Weight;
+
+for (var i=0;i<=maxBlock;i++) {
+if (koopa.isColliding(block[i]) && koopa.Y + koopa.Height < block[i].Y + koopa.Velocity_Y) {
+	koopa.Y = block[i].Y - koopa.Height;
+	koopa.Velocity_Y = 0;
+	}
+}
+
+
 //Hmm Maybe Something Should be here?
 
 //Rendering
@@ -114,6 +136,8 @@ for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,b
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 256);
 
 grafix.drawImage(pent.Sprite,pent.X,pent.Y);
+
+grafix.drawImage(koopa.Sprite,koopa.X,koopa.Y);
 
 grafix.drawImage(player.Sprite,player.X,player.Y);
 setTimeout(MainLoop,1000/60);
