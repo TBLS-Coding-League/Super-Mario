@@ -19,17 +19,28 @@ var sndJump = new Audio ("AUDIO/Jump.mp3")
 //     Rendering
 var gameCanvas = document.getElementById("graphics");
 var grafix = gameCanvas.getContext('2d');
+
 var player = new Object('IMAGES/TempMario.png',150,100,32,44);
 
-var pent = new Object('IMAGES/pent.png',200,200,32,44);
-
 var startingBoundary = new Object('IMAGES/StartingWall.png',40,0,100,400);
+var chancebox = new Object('IMAGES/chancebox.png',322,200,32,32);
+var pipe = new Object('IMAGES/Pipe.png',600,260,32,40);
 
 var maxBlock= 200;
 var block = new Array();
 for (var i=0;i<=maxBlock;i++) (
 	block[i] = new Object('IMAGES/Ground.png',i*32+0,300,32,32)
 )
+	block[13] = new Object('IMAGES/Ground.png',6*32,600,32,32)
+	block[14] = new Object('IMAGES/Ground.png',7*32,600,32,32)
+	block[15] = new Object('IMAGES/Ground.png',8*32,600,32,32)
+	/*
+	block[9] = new Object('IMAGES/Ground.png',9*32,600,32,32)
+	block[10] = new Object('IMAGES/Ground.png',10*32,600,32,32)
+	block[11] = new Object('IMAGES/Ground.png',11*32,600,32,32)
+	block[12] = new Object('IMAGES/Ground.png',12*32,600,32,32)
+	block[13] = new Object('IMAGES/Ground.png',13*32,600,32,32)
+	*/
 var underBlock = new Array();
 for (var i=0;i<=maxBlock;i++) {
 	underBlock[i] = new Object('IMAGES/BelowGround.png',i*32,332,32,32);
@@ -64,17 +75,18 @@ function MainLoop() {
 //Scroll Control
 for (var i=0;i<=maxBlock;i++) block[i].X += -player.Velocity_X;
 player.Y += player.Velocity_Y;
-pent.X += -player.Velocity_X;
-
+chancebox.X += -player.Velocity_X;
+pipe.X += -player.Velocity_X;
 startingBoundary.X += -player.Velocity_X;
 
-//Movement & Collision Interactions
+//Movement
 if (isLeft) player.Velocity_X = -3;
 if (isRight) player.Velocity_X = 3;
 if (!isLeft && !isRight && player.Velocity_Y== 0) player.Velocity_X = 0;
-
 if (player.Velocity_Y < player.Gravity) player.Velocity_Y += player.Weight;
 
+//Collisions
+//					Ground Collisions
 for (var i=0;i<=maxBlock;i++) {
 if (player.isColliding(block[i]) && player.Y + player.Height < block[i].Y + player.Velocity_Y) {
 	player.Y = block[i].Y - player.Height;
@@ -82,28 +94,43 @@ if (player.isColliding(block[i]) && player.Y + player.Height < block[i].Y + play
 
 	}
 }
-if (player.isColliding(pent) && player.Y + player.Height < pent.Y + player.Velocity_Y) {
-	player.Y = pent.Y - player.Height;
+//					Chancebox Collisions
+if (player.isColliding(chancebox) && player.Y + player.Height < chancebox.Y + player.Velocity_Y) {
+	player.Y = chancebox.Y - player.Height;
 	player.Velocity_Y = 0;
 }
+if (player.isColliding(chancebox) && player.Y + player.Height + player.Velocity_Y > chancebox.Y ) {
+	player.Y = chancebox.Y + player.Height;
+	player.Velocity_Y = 0;
+}
+//					Pipe Collisions
+if (player.isColliding(pipe) && player.Y + player.Height < pipe.Y + player.Velocity_Y) {
+	player.Y = pipe.Y - player.Height;
+	player.Velocity_Y = 0;
+}
+/*
+if (player.isColliding(pipe) && player.Y + player.Height + player.Velocity_Y > pipe.Y ) {
+	player.Y = pipe.Y + player.Height;
+	player.Velocity_Y = 0;
+}
+*/
+//					Starting Boundary Collisions
 if (player.isColliding(startingBoundary)) {
 	player.Velocity_X = 0.5;
 }
+
 if (isSpace && player.Velocity_Y == 0) {
 	player.Velocity_Y = -5;
 	sndJump.play();
-}
-
-//Hmm Maybe Something Should be here?
-
+	}
+//Losing The Game
+if (player.Y > 400) {GameLost();}
+//Winning The Game
+if (player.X == pipe.X && player.Y - pipe.Y <= 8) { GameWon();}
 //Rendering
 grafix.clearRect(0,0,gameCanvas.width,gameCanvas.height);
 
-grafix.drawImage(startingBoundary.Sprite,startingBoundary.X,startingBoundary.Y);
-
-
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(block[i].Sprite,block[i].X,block[i].Y);
-
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 32);
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 64);
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 96);
@@ -113,12 +140,25 @@ for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,b
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 224);
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 256);
 
-grafix.drawImage(pent.Sprite,pent.X,pent.Y);
+grafix.drawImage(startingBoundary.Sprite,startingBoundary.X,startingBoundary.Y);
+grafix.drawImage(chancebox.Sprite,chancebox.X,chancebox.Y);
+grafix.drawImage(pipe.Sprite,pipe.X,pipe.Y);
 
 grafix.drawImage(player.Sprite,player.X,player.Y);
+
+//End MainLoop
 setTimeout(MainLoop,1000/60);
 }
+//GameLost
+function GameLost() {
+alert (" You Have Lost, Please Refresh This Page ");
 
+}
+//GameWon
+function GameWon() {
+alert (" You Have Won!!!!!!!!!!, Please Refresh This Page To Play Again ");
+
+}
 //Object Class
 function Object(img,x,y,width,height) {
 this.Sprite = new Image();
