@@ -23,9 +23,8 @@ var grafix = gameCanvas.getContext('2d');
 var player = new Object('IMAGES/TempMario.png',150,100,32,44);
 
 var startingBoundary = new Object('IMAGES/StartingWall.png',40,0,100,400);
-var chancebox = new Object('IMAGES/chancebox.png',322,200,32,32);
-var pipe = new Object('IMAGES/Pipe.png',600,260,32,40);
 
+//Level Layout
 var maxBlock= 200;
 var block = new Array();
 for (var i=0;i<=maxBlock;i++) (
@@ -34,13 +33,33 @@ for (var i=0;i<=maxBlock;i++) (
 	block[13] = new Object('IMAGES/Ground.png',6*32,600,32,32)
 	block[14] = new Object('IMAGES/Ground.png',7*32,600,32,32)
 	block[15] = new Object('IMAGES/Ground.png',8*32,600,32,32)
-	/*
-	block[9] = new Object('IMAGES/Ground.png',9*32,600,32,32)
-	block[10] = new Object('IMAGES/Ground.png',10*32,600,32,32)
-	block[11] = new Object('IMAGES/Ground.png',11*32,600,32,32)
-	block[12] = new Object('IMAGES/Ground.png',12*32,600,32,32)
-	block[13] = new Object('IMAGES/Ground.png',13*32,600,32,32)
-	*/
+
+var maxchancebox = 1;
+var chancebox = new Array();
+for (var i=0;i<=maxchancebox;i++) (
+	 chancebox[i] = new Object('IMAGES/chancebox.png',-100,-100,32,32)
+)
+	chancebox[1] = new Object('IMAGES/chancebox.png',322,200,32,32);
+	
+
+var maxplatform3w = 1;
+var platform3w = new Array();
+for (var i=0;i<=maxplatform3w;i++) (
+	platform3w[i] = new Object('IMAGES/platform3w.png',-300,-100,96,32)
+)
+	platform3w[1] = new Object('IMAGES/platform3w.png',322-96,200,96,32);
+	platform3w[2] = new Object('IMAGES/platform3w.png',354+96,200,96,32);
+	platform3w[3] = new Object('IMAGES/platform3w.png',600,200,96,32);
+/*
+var 2wplatform = new Array();
+	2wplatform[1] = new Object('IMAGES/2wplatform.png',332+64,200,64,32);
+
+var 1wplatform = new Array();
+	1wplatform[1] = new Object('IMAGES/1wplatform.png',450,200,32,32);
+*/
+
+var pipe = new Object('IMAGES/Pipe.png',6400,260,32,40);	
+	
 var underBlock = new Array();
 for (var i=0;i<=maxBlock;i++) {
 	underBlock[i] = new Object('IMAGES/BelowGround.png',i*32,332,32,32);
@@ -74,6 +93,8 @@ function MainLoop() {
 
 //Scroll Control
 for (var i=0;i<=maxBlock;i++) block[i].X += -player.Velocity_X;
+for (var i=0;i<=maxchancebox;i++) chancebox[i].X += -player.Velocity_X;
+for (var i=0; i<=maxplatform3w;i++) platform3w[i].X += -player.Velocity_X;
 player.Y += player.Velocity_Y;
 chancebox.X += -player.Velocity_X;
 pipe.X += -player.Velocity_X;
@@ -95,13 +116,15 @@ if (player.isColliding(block[i]) && player.Y + player.Height < block[i].Y + play
 	}
 }
 //					Chancebox Collisions
-if (player.isColliding(chancebox) && player.Y + player.Height < chancebox.Y + player.Velocity_Y) {
-	player.Y = chancebox.Y - player.Height;
+for (var i=0; i<=maxchancebox; i++) {
+if (player.isColliding(chancebox[i]) && player.Y + player.Height < chancebox[i].Y + player.Velocity_Y) {
+	player.Y = chancebox[i].Y - player.Height;
 	player.Velocity_Y = 0;
 }
-if (player.isColliding(chancebox) && player.Y + player.Height + player.Velocity_Y > chancebox.Y ) {
-	player.Y = chancebox.Y + player.Height;
+if (player.isColliding(chancebox[i]) && player.Y + player.Height + player.Velocity_Y > chancebox[i].Y ) {
+	player.Y = chancebox[i].Y + player.Height;
 	player.Velocity_Y = 0;
+	}
 }
 //					Pipe Collisions
 if (player.isColliding(pipe) && player.Y + player.Height < pipe.Y + player.Velocity_Y) {
@@ -140,8 +163,11 @@ for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,b
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 224);
 for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,block[i].Y + 256);
 
+for (var i=0;i<=maxchancebox;i++) grafix.drawImage(chancebox[i].Sprite,chancebox[i].X,chancebox[i].Y);
+
+for (var i=0;i<=maxplatform3w;i++) grafix.drawImage(platform3w[i].Sprite,platform3w[i].X,platform3w[i].Y);
+
 grafix.drawImage(startingBoundary.Sprite,startingBoundary.X,startingBoundary.Y);
-grafix.drawImage(chancebox.Sprite,chancebox.X,chancebox.Y);
 grafix.drawImage(pipe.Sprite,pipe.X,pipe.Y);
 
 grafix.drawImage(player.Sprite,player.X,player.Y);
