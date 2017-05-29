@@ -1,6 +1,6 @@
 <audio id="theme1" src="AUDIO/Theme1.mp3" onended="theme1End()"></audio>
 <body style="background-color:brown"onkeydown="keyDown(event)" onkeyup="keyUp(event)"> </body>
-<canvas id="graphics" width=600 height=400 style="position:absolute;top:100;left:400;border:black 3px solid; background-color:blue;background-image:url('IMAGES/background.png');"> </canvas>
+<canvas id="graphics" width=600 height=400 style="position:absolute;top:0;left:0;border:black 3px solid; background-color:blue;background-image:url('IMAGES/background.png');"> </canvas>
 
 <script> 
 
@@ -23,47 +23,138 @@ var grafix = gameCanvas.getContext('2d');
 var player = new Object('IMAGES/TempMario.png',150,100,32,44);
 
 var startingBoundary = new Object('IMAGES/StartingWall.png',40,0,100,400);
+var pipe = new Object('IMAGES/Pipe.png',6400,260,32,40);
+var flagpole = new Object('IMAGES/FlagPole.png',125*32,148,32,220);
 
-//Level Layout
+//Ground Layout
 var maxBlock= 200;
 var block = new Array();
 for (var i=0;i<=maxBlock;i++) (
-	block[i] = new Object('IMAGES/Ground.png',i*32+0,300,32,32)
+	block[i] = new Object('IMAGES/Ground.png',-600,600,32,32)
 )
-	block[13] = new Object('IMAGES/Ground.png',6*32,600,32,32)
-	block[14] = new Object('IMAGES/Ground.png',7*32,600,32,32)
-	block[15] = new Object('IMAGES/Ground.png',8*32,600,32,32)
-
-var maxchancebox = 1;
-var chancebox = new Array();
-for (var i=0;i<=maxchancebox;i++) (
-	 chancebox[i] = new Object('IMAGES/chancebox.png',-100,-100,32,32)
-)
-	chancebox[1] = new Object('IMAGES/chancebox.png',322,200,32,32);
+	block[1] = new Object('IMAGES/Ground.png',4*32,300,32,32);
+	block[2] = new Object('IMAGES/Ground.png',5*32,300,32,32);
+	block[3] = new Object('IMAGES/Ground.png',6*32,300,32,32);
+	block[4] = new Object('IMAGES/Ground.png',7*32,300,32,32);
+	block[5] = new Object('IMAGES/Ground.png',8*32,300,32,32);
+	block[6] = new Object('IMAGES/Ground.png',9*32,300,32,32);
+	block[7] = new Object('IMAGES/Ground.png',10*32,300,32,32);
+	block[8] = new Object('IMAGES/Ground.png',11*32,300,32,32);
+	block[9] = new Object('IMAGES/Ground.png',12*32,300,32,32);
+	block[10] = new Object('IMAGES/Ground.png',13*32,300,32,32);
+	block[11] = new Object('IMAGES/Ground.png',14*32,300,32,32);
 	
-
-var maxplatform3w = 1;
-var platform3w = new Array();
-for (var i=0;i<=maxplatform3w;i++) (
-	platform3w[i] = new Object('IMAGES/platform3w.png',-300,-100,96,32)
-)
-	platform3w[1] = new Object('IMAGES/platform3w.png',322-96,200,96,32);
-	platform3w[2] = new Object('IMAGES/platform3w.png',354+96,200,96,32);
-	platform3w[3] = new Object('IMAGES/platform3w.png',600,200,96,32);
-/*
-var 2wplatform = new Array();
-	2wplatform[1] = new Object('IMAGES/2wplatform.png',332+64,200,64,32);
-
-var 1wplatform = new Array();
-	1wplatform[1] = new Object('IMAGES/1wplatform.png',450,200,32,32);
-*/
-
-var pipe = new Object('IMAGES/Pipe.png',6400,260,32,40);	
+	block[11] = new Object('IMAGES/Ground.png',20*32,300,32,32);
+	block[12] = new Object('IMAGES/Ground.png',21*32,300,32,32);
+	block[13] = new Object('IMAGES/Ground.png',22*32,300,32,32);
+	block[14] = new Object('IMAGES/Ground.png',23*32,300,32,32);
+	block[15] = new Object('IMAGES/Ground.png',24*32,300,32,32);
+	block[16] = new Object('IMAGES/Ground.png',25*32,300,32,32);
+	block[17] = new Object('IMAGES/Ground.png',26*32,300,32,32);
+	block[18] = new Object('IMAGES/Ground.png',27*32,300,32,32);
 	
+	block[19] = new Object('IMAGES/Ground.png',28*32,364,32,32);
+	block[20] = new Object('IMAGES/Ground.png',29*32,364,32,32);
+	block[21] = new Object('IMAGES/Ground.png',30*32,364,32,32);
+	block[22] = new Object('IMAGES/Ground.png',31*32,364,32,32);
+	block[23] = new Object('IMAGES/Ground.png',32*32,364,32,32);
+	block[24] = new Object('IMAGES/Ground.png',33*32,364,32,32);
+	block[25] = new Object('IMAGES/Ground.png',34*32,364,32,32);
+	block[26] = new Object('IMAGES/Ground.png',35*32,364,32,32);
+	block[27] = new Object('IMAGES/Ground.png',36*32,364,32,32);
+	block[28] = new Object('IMAGES/Ground.png',37*32,364,32,32);
+	block[29] = new Object('IMAGES/Ground.png',38*32,364,32,32);
+	block[30] = new Object('IMAGES/Ground.png',39*32,364,32,32);
+	block[31] = new Object('IMAGES/Ground.png',40*32,364,32,32);
+	
+	block[32] = new Object('IMAGES/Ground.png',44*32,268,32,32);
+	block[33] = new Object('IMAGES/Ground.png',45*32,268,32,32);
+	block[34] = new Object('IMAGES/Ground.png',46*32,268,32,32);
+	block[35] = new Object('IMAGES/Ground.png',47*32,268,32,32);
+	block[36] = new Object('IMAGES/Ground.png',48*32,268,32,32);
+	block[37] = new Object('IMAGES/Ground.png',49*32,268,32,32);
+	block[38] = new Object('IMAGES/Ground.png',50*32,268,32,32);
+	block[39] = new Object('IMAGES/Ground.png',51*32,268,32,32);
+	block[40] = new Object('IMAGES/Ground.png',52*32,268,32,32);
+	block[41] = new Object('IMAGES/Ground.png',53*32,268,32,32);
+	block[42] = new Object('IMAGES/Ground.png',54*32,268,32,32);
+	block[43] = new Object('IMAGES/Ground.png',55*32,268,32,32);
+	
+	block[44] = new Object('IMAGES/Ground.png',109*32,368,32,32);
+	block[45] = new Object('IMAGES/Ground.png',110*32,368,32,32);
+	block[46] = new Object('IMAGES/Ground.png',111*32,368,32,32);
+	block[47] = new Object('IMAGES/Ground.png',112*32,368,32,32);
+	block[48] = new Object('IMAGES/Ground.png',113*32,368,32,32);
+	block[49] = new Object('IMAGES/Ground.png',114*32,368,32,32);
+	block[50] = new Object('IMAGES/Ground.png',115*32,368,32,32);
+	block[51] = new Object('IMAGES/Ground.png',116*32,368,32,32);
+	block[52] = new Object('IMAGES/Ground.png',117*32,368,32,32);
+	block[53] = new Object('IMAGES/Ground.png',118*32,368,32,32);
+	block[54] = new Object('IMAGES/Ground.png',119*32,368,32,32);
+	block[55] = new Object('IMAGES/Ground.png',120*32,368,32,32);
+	block[56] = new Object('IMAGES/Ground.png',121*32,368,32,32);
+	block[57] = new Object('IMAGES/Ground.png',122*32,368,32,32);
+	block[58] = new Object('IMAGES/Ground.png',123*32,368,32,32);
+	block[59] = new Object('IMAGES/Ground.png',124*32,368,32,32);
+	block[60] = new Object('IMAGES/Ground.png',125*32,368,32,32);
+	block[61] = new Object('IMAGES/Ground.png',126*32,368,32,32);
+	block[62] = new Object('IMAGES/Ground.png',127*32,368,32,32);
+	block[63] = new Object('IMAGES/Ground.png',128*32,368,32,32);
+	block[64] = new Object('IMAGES/Ground.png',129*32,368,32,32);
+	block[65] = new Object('IMAGES/Ground.png',130*32,368,32,32);
+
 var underBlock = new Array();
 for (var i=0;i<=maxBlock;i++) {
 	underBlock[i] = new Object('IMAGES/BelowGround.png',i*32,332,32,32);
 }
+
+var maxchancebox = 20;
+var chancebox = new Array();
+for (var i=0;i<=maxchancebox;i++) (
+	 chancebox[i] = new Object('IMAGES/chancebox.png',-600,800,32,32)
+)
+	chancebox[1] = new Object('IMAGES/chancebox.png',322,200,32,32);
+	chancebox[2] = new Object('IMAGES/chancebox.png',25*32,200,32,32);
+	
+var maxplatform3w = 20;
+var platform3w = new Array();
+for (var i=0;i<=maxplatform3w;i++) (
+	platform3w[i] = new Object('IMAGES/platform3w.png',-600,300,96,32)
+)
+	platform3w[1] = new Object('IMAGES/platform3w.png',322-96,200,96,32);
+	
+	platform3w[2] = new Object('IMAGES/platform3w.png',59*32,268,96,32);
+	platform3w[3] = new Object('IMAGES/platform3w.png',69*32,268,96,32);
+	platform3w[4] = new Object('IMAGES/platform3w.png',79*32,268,96,32);
+	platform3w[5] = new Object('IMAGES/platform3w.png',89*32,268,96,32);
+	platform3w[6] = new Object('IMAGES/platform3w.png',98*32,236,96,32);
+
+var maxplatform1w = 20;
+var platform1w = new Array();
+for (var i=0;i<=maxplatform1w;i++) (
+	platform1w[i] = new Object('IMAGES/platform1w.png',-600,300,96,32)
+)
+	platform1w[1] = new Object('IMAGES/platform1w.png',113*32,336,96,32);
+	platform1w[2] = new Object('IMAGES/platform1w.png',114*32,336,96,32);
+	platform1w[3] = new Object('IMAGES/platform1w.png',114*32,304,96,32);
+	platform1w[4] = new Object('IMAGES/platform1w.png',115*32,336,96,32);
+	platform1w[5] = new Object('IMAGES/platform1w.png',115*32,304,96,32);
+	platform1w[6] = new Object('IMAGES/platform1w.png',115*32,272,96,32);
+	platform1w[7] = new Object('IMAGES/platform1w.png',116*32,336,96,32);
+	platform1w[8] = new Object('IMAGES/platform1w.png',116*32,304,96,32);
+	platform1w[9] = new Object('IMAGES/platform1w.png',116*32,272,96,32);
+	platform1w[10] = new Object('IMAGES/platform1w.png',116*32,240,96,32);
+	platform1w[11] = new Object('IMAGES/platform1w.png',117*32,336,96,32);
+	platform1w[12] = new Object('IMAGES/platform1w.png',117*32,304,96,32);
+	platform1w[13] = new Object('IMAGES/platform1w.png',117*32,272,96,32);
+	platform1w[14] = new Object('IMAGES/platform1w.png',117*32,240,96,32);
+	platform1w[15] = new Object('IMAGES/platform1w.png',117*32,208,96,32);
+/*
+var 2wplatform = new Array();
+	2wplatform[1] = new Object('IMAGES/2wplatform.png',332+64,200,64,32);
+*/
+	
+	
 //       Control
 var isLeft = false;
 var isRight = false;
@@ -95,12 +186,15 @@ function MainLoop() {
 for (var i=0;i<=maxBlock;i++) block[i].X += -player.Velocity_X;
 for (var i=0;i<=maxchancebox;i++) chancebox[i].X += -player.Velocity_X;
 for (var i=0; i<=maxplatform3w;i++) platform3w[i].X += -player.Velocity_X;
-player.Y += player.Velocity_Y;
+for (var i=0; i<=maxplatform1w;i++) platform1w[i].X += -player.Velocity_X;
+flagpole.X += - player.Velocity_X;
 chancebox.X += -player.Velocity_X;
 pipe.X += -player.Velocity_X;
 startingBoundary.X += -player.Velocity_X;
 
+
 //Movement
+player.Y += player.Velocity_Y
 if (isLeft) player.Velocity_X = -3;
 if (isRight) player.Velocity_X = 3;
 if (!isLeft && !isRight && player.Velocity_Y== 0) player.Velocity_X = 0;
@@ -115,8 +209,42 @@ if (player.isColliding(block[i]) && player.Y + player.Height < block[i].Y + play
 
 	}
 }
+//                  Platform3w Collisions
+for (var i=0; i<=maxplatform3w; i++) {
+if (player.isColliding(platform3w[i]) && player.Y + player.Height < platform3w[i].Y + player.Velocity_Y) {
+	player.Y = platform3w[i].Y - player.Height;
+	player.Velocity_Y = 0;
+}
+if (player.isColliding(platform3w[i]) && player.Y + player.Height + player.Velocity_Y > platform3w[i].Y ) {
+	player.Y = platform3w[i].Y + player.Height;
+	player.Velocity_Y = 0;
+	}
+}
+//                  Platform1wCollisions
+for (var i=0; i<=maxplatform1w; i++) {
+if (player.isColliding(platform1w[i]) && player.Y + player.Height < platform1w[i].Y + player.Velocity_Y) {
+	player.Y = platform1w[i].Y - player.Height;
+	player.Velocity_Y = 0;
+}
+if (player.isColliding(platform1w[i]) && player.Y + player.Height + player.Velocity_Y > platform1w[i].Y ) {
+	player.Y = platform1w[i].Y + player.Height;
+	player.Velocity_Y = 0;
+	}
+}
 //					Chancebox Collisions
+
 for (var i=0; i<=maxchancebox; i++) {
+/*
+if (player.isColliding(chancebox[i]) && player.X + player.Width > chancebox[i].X ) {
+	player.X = chancebox[i].X + player.Width;
+	player.Velocity_X = 0;
+	}
+if (player.isColliding(chancebox[i]) && player.X < chancebox[i].Width + chancebox[i].X ) {
+	player.X = chancebox[i].X - player.Width;
+	player.Velocity_X = 0;
+	}
+*/
+
 if (player.isColliding(chancebox[i]) && player.Y + player.Height < chancebox[i].Y + player.Velocity_Y) {
 	player.Y = chancebox[i].Y - player.Height;
 	player.Velocity_Y = 0;
@@ -125,6 +253,7 @@ if (player.isColliding(chancebox[i]) && player.Y + player.Height + player.Veloci
 	player.Y = chancebox[i].Y + player.Height;
 	player.Velocity_Y = 0;
 	}
+
 }
 //					Pipe Collisions
 if (player.isColliding(pipe) && player.Y + player.Height < pipe.Y + player.Velocity_Y) {
@@ -166,9 +295,11 @@ for (var i=0;i<=maxBlock;i++) grafix.drawImage(underBlock[i].Sprite,block[i].X,b
 for (var i=0;i<=maxchancebox;i++) grafix.drawImage(chancebox[i].Sprite,chancebox[i].X,chancebox[i].Y);
 
 for (var i=0;i<=maxplatform3w;i++) grafix.drawImage(platform3w[i].Sprite,platform3w[i].X,platform3w[i].Y);
+for (var i=0;i<=maxplatform1w;i++) grafix.drawImage(platform1w[i].Sprite,platform1w[i].X,platform1w[i].Y);
 
 grafix.drawImage(startingBoundary.Sprite,startingBoundary.X,startingBoundary.Y);
 grafix.drawImage(pipe.Sprite,pipe.X,pipe.Y);
+grafix.drawImage(flagpole.Sprite,flagpole.X,flagpole.Y);
 
 grafix.drawImage(player.Sprite,player.X,player.Y);
 
